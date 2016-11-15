@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel='stylesheet' href="../static/css/style.css">
+<script type="text/javascript"
+    src="../static/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../static/js/util.js"></script>
+<script type="text/javascript">
+function showTeacher() {
+    if($('#teacher').data('id') && $('#teacher').data('done')) {
+        $('#teacher').val($('#teacher').data('id'));
+    }
+}
+$(document).ready(function() {
+    var result;
+    if(location.href && (result = location.href.match(/id=(\d+)/) ) ) {
+        var jqXhr = $.get('../student?id=' + result[1]).done(function(data) {
+            if(data) {
+                data = JSON.parse(data);
+                $('#id').val(data.id);
+                $('#name').val(data.name);
+                $('#age').val(data.age);
+
+                if(data.teacher) {
+	                $('#teacher').data('id', data.teacher.id);
+	                showTeacher();
+                }
+            }
+        }).fail(ajaxErrorHandle);
+    }
+
+    $.get('../teachers').done(function(data) {
+        if(data) {
+            data = JSON.parse(data);
+            $.each(data, function(i, e) {
+                $('#teacher').append($('<option value="' + e.id + '">'+ e.name +'</option>'));
+            });
+            $('#teacher').data('done', true);
+            showTeacher();
+        }
+    })
+    
+    $('#submit').click(function() {
+        $.ajax({
+        	url:'../student?id=' + $('#id').val() + '&name=' + $('#name').val() + '&age=' + $('#age').val() + '&teacherId=' + $('#teacher').val(), 
+        	method: 'put'
+        }).done(function() {
+            location.href = 'students.html';
+        }).fail(ajaxErrorHandle);
+    })
+})
+</script>
+</head>
+<body>
+<a href="main.html">首页</a> <a href="#" onclick="history.go(-1);">上一页</a>
+<br/><br/>
+学生信息：
+<hr>
+<input type="hidden" id="id" name="id"/>
+姓名：<input id="name" name="name"/>
+<br/>
+年龄：<input id="age" name="age"/>
+<br/>
+老师信息：
+<hr>
+指定老师：<select id="teacher" name="teacher"></select>
+<br/>
+<input id="submit" type="submit" value="保存"/>
+</body>
+</html>

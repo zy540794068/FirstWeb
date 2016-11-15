@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel='stylesheet' href="../static/css/style.css">
+<script type="text/javascript"
+    src="../static/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../static/js/util.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#submit').click(function() {
+        $.post('../computer', {name: $('#name').val(), location: $('#location').val()}).done(function() {
+            location.href = 'computers.html';
+        }).fail(ajaxErrorHandle);
+    })
+})
+</script>
+</head>
+<body>
+<a href="main.html">首页</a> <a href="#" onclick="history.go(-1);">上一页</a>
+<br/><br/>
+电脑信息：
+<hr>
+名称：<input id="name" name="name"/>
+<br/>
+位置：<input id="location" name="location"/>
+<br/>
+<input id="submit" type="submit" value="添加"/>
+</body>
+</html>

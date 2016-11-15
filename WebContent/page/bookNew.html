@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel='stylesheet' href="../static/css/style.css">
+<script type="text/javascript"
+    src="../static/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../static/js/util.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#submit').click(function() {
+        $.post('../book', {name: $('#name').val()}).done(function() {
+            location.href = 'books.html';
+        }).fail(ajaxErrorHandle);
+    })
+})
+</script>
+</head>
+<body>
+<a href="main.html">首页</a> <a href="#" onclick="history.go(-1);">上一页</a>
+<br/><br/>
+书本信息：
+<hr>
+名称：<input id="name" name="name"/>
+<br/>
+<input id="submit" type="submit" value="添加"/>
+</body>
+</html>

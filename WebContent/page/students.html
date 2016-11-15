@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<base href="SecondWepApp">
+<title>Insert title here</title>
+<link rel='stylesheet' href="../static/css/style.css">
+<script type="text/javascript"
+	src="../static/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../static/js/util.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    var jqXhr = $.get('../students').done(function(data){
+        if(data) {
+            data = JSON.parse(data);
+            $.each(data, function(i, e){
+                var $tr = $('#temp').clone();
+                var tds = $tr.find('td');
+                $tr.data('id', e.id);
+                tds[0].innerText = e.id;
+                tds[1].innerText = e.name;
+                tds[2].innerText = e.age;
+                $('#list').append($tr.removeClass("hide"));
+             })
+         }
+    }).fail(ajaxErrorHandle);
+
+    $('#list').on('click', 'button', function(e) {
+        var $target = $(e.target);
+        if($target.is('.detail')) {
+            location.href = 'student.html?id=' + $target.closest('tr').data('id');
+        } else if($target.is('.update')){
+            location.href = 'studentUpdate.html?id=' + $target.closest('tr').data('id');
+        } else {
+            $.ajax({
+                url: '../student?id=' + $target.closest('tr').data('id'),
+                method: 'delete'
+            }).done(function() {
+                location.reload();
+            }).fail(ajaxErrorHandle);
+        }
+    })
+});
+</script>
+</head>
+<body>
+    <a href="main.html">首页</a>
+	<table id="list">
+		<thead>
+			<th>ID</th>
+			<th>name</th>
+			<th>age</th>
+			<th></th>
+			<tr id="temp" class="hide">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><button class="detail">详情</button><button class="update">修改</button><button class="delete">删除</button></td>
+			</tr>
+		</thead>
+	</table>
+	<a href="studentNew.html">添加</a>
+</body>
+</html>

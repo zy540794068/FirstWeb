@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel='stylesheet' href="../static/css/style.css">
+<script type="text/javascript"
+    src="../static/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="../static/js/util.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    var result;
+    if(location.href && (result = location.href.match(/id=(\d+)/) ) ) {
+        var jqXhr = $.get('../teacher?id=' + result[1]).done(function(data) {
+            if(data) {
+                data = JSON.parse(data);
+                $('#id').text(data.id);
+                $('#name').text(data.name);
+                $('#age').text(data.age);
+
+                if(data.studentList && $.isArray(data.studentList)) {
+                    var str = data.studentList.map(function(e) {
+                        return e.name;
+                    }).join(",");
+                    $('#studentName').text(str);
+                }
+            }
+        }).fail(ajaxErrorHandle);
+    }
+});
+</script>
+</head>
+<body>
+<a href="main.html">首页</a> <a href="#" onclick="history.go(-1);">上一页</a><br/>
+老师信息:
+<hr>
+ID:<label id="id"></label>
+<br/>
+姓名：<label id="name"></label>
+<br/>
+年龄：<label id="age"></label>
+<br/><br/>
+学生信息：
+<hr/>
+姓名：<label id="studentName"></label>
+</body>
+</html>
